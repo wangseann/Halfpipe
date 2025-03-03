@@ -125,7 +125,119 @@ apptainer run --no-home --cleanenv --bind /:/ext HALFpipe_1.0.1.sif --use-cluste
 ```
 
 ---
+# **Specifying Settings in HALFpipe**
 
+Once the pipeline is launched, the user interface will prompt you to enter configuration settings. Below is a detailed breakdown of all options, ensuring you correctly specify inputs for your analysis.
+
+## **1. Data Settings**
+### **1.1 Working Directory**
+   - **Options**: Enter a file path  
+   - **Example**: `/path/to/output_directory`  
+   - **Description**: This is the folder where all pipeline output files will be stored.
+
+### **1.2 Is the data in BIDS format?**
+   - **Options**: `Yes` / `No`  
+   - **Description**: Select `Yes` if your dataset follows the BIDS (Brain Imaging Data Structure) format. If `No`, you will need to specify additional paths manually.
+
+### **1.3 T1-weighted Image Path**
+   - **Options**: Enter a file path using `{subject}` placeholder  
+   - **Example**: `/path/to/T1/{subject}/T1.nii.gz`  
+   - **Description**: The path to anatomical T1-weighted images for each subject. `{subject}` is a placeholder that will be automatically replaced with each subject’s ID.
+
+### **1.4 Resting-State fMRI Data Path**
+   - **Options**: Enter a file path using `{subject}` placeholder  
+   - **Example**: `/path/to/rsfMRI/{subject}/epi.nii.gz`  
+   - **Description**: The path to resting-state fMRI data for each subject. `{subject}` will be replaced dynamically for each subject.
+
+### **1.5 Check Repetition Time (TR)**
+   - **Options**: `Yes` / `No`  
+   - **Description**: The system will check and display the TR value in seconds. If incorrect, enter the correct TR manually.
+
+### **1.6 Add More BOLD Image Files?**
+   - **Options**: `Yes` / `No`  
+   - **Description**: Select `Yes` if you have additional functional image files to include.
+
+### **1.7 Slice Timing Correction**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, specify the slice acquisition order. This is needed if slice timing correction is required in preprocessing.
+
+### **1.8 Field Maps for Distortion Correction**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, specify the type of field maps used and their paths.
+
+---
+
+## **2. Feature Extraction Settings**
+These settings define which resting-state features will be computed. Click on each feature type to view specific configuration instructions.
+
+### **2.1 First-Level Features to Extract**
+   - **Options**:  
+     - [Seed-Based Connectivity](#seed-based-connectivity)  
+     - [Dual Regression](#dual-regression)  
+     - [Atlas-Based Connectivity Matrix](#atlas-based-connectivity-matrix)  
+     - [ReHo (Regional Homogeneity)](#reho)  
+     - [fALFF (Fractional Amplitude of Low-Frequency Fluctuations)](#falff)  
+   - **Description**: Choose one or more features to extract during preprocessing.
+
+## **3. Confound Removal and Filtering**
+### **3.1 Apply Smoothing**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, specify the full-width half-maximum (FWHM) smoothing kernel size.
+
+### **3.2 Specify Smoothing FWHM (Full-Width Half-Maximum)**
+   - **Options**: Enter a numeric value (e.g., `6.0 mm`)  
+   - **Default**: `6.0 mm`  
+   - **Description**: Sets the spatial smoothing kernel size in millimeters.
+
+### **3.3 Temporal Filtering**
+   - **Options**:  
+     - `Skip`  
+     - Low-Pass Filter (default: `0 Hz`)  
+     - High-Pass Filter (default: `125.0 Hz`)  
+   - **Description**: Applies frequency filtering to the time-series data.
+
+### **3.4 Confound Removal**
+   - **Options**:  
+     - `ICA-AROMA`  
+     - `aCompCor`  
+     - `Both ICA-AROMA and aCompCor`  
+   - **Description**: Specifies the confound regression strategy to remove noise from the signal.
+
+---
+
+## **4. Preprocessing Output Settings**
+### **4.1 Output Preprocessed Image**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, a preprocessed resting-state image will be saved.
+
+### **4.2 Specify Group-Level Model**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, specify group-level statistical modeling options.
+
+### **4.3 Generate Quality Control Reports**
+   - **Options**: `Yes` / `No`  
+   - **Description**: If `Yes`, automatically generate reports to check data quality.
+
+---
+
+## **Feature-Specific Configuration Pages**
+Each first-level feature has its own dedicated page for detailed configuration.
+
+- [Seed-Based Connectivity](#seed-based-connectivity)
+- [Dual Regression](#dual-regression)
+- [Atlas-Based Connectivity Matrix](#atlas-based-connectivity-matrix)
+- [ReHo (Regional Homogeneity)](#reho)
+- [fALFF (Fractional Amplitude of Low-Frequency Fluctuations)](#falff)
+
+---
+
+## **Final Steps**
+Once all settings are configured, a **spec.json** file will be generated in the working directory, which contains all specified options. The pipeline will then proceed to process each subject’s data accordingly.
+
+🚀 **You're now ready to run HALFpipe!** Let me know if you need additional refinements.
+
+
+---
 ### **Submitting Jobs on HPC**
 Once settings are specified, submit the job:
 ```bash
